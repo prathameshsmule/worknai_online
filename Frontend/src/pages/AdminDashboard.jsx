@@ -1,6 +1,6 @@
 // src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { API_BASE } from "../config/api.js";
+import { API_BASE } from "../components/api.js";
 
 const AdminDashboard = () => {
   const [enquiries, setEnquiries] = useState([]);
