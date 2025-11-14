@@ -29,7 +29,8 @@ const EnrollmentForm = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/enquiry", {
+     const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/enquiry`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
