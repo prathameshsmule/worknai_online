@@ -1,4 +1,6 @@
+// src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from "react";
+import { API_BASE } from "../config/api.js";
 
 const AdminDashboard = () => {
   const [enquiries, setEnquiries] = useState([]);
@@ -39,7 +41,7 @@ const AdminDashboard = () => {
   /* -------------------- Fetch Enquiries -------------------- */
   const fetchEnquiries = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/enquiry", {
+      const res = await fetch(`${API_BASE}/enquiry`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const data = await res.json();
@@ -52,7 +54,7 @@ const AdminDashboard = () => {
   /* -------------------- Fetch Admins -------------------- */
   const fetchAdmins = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/admins", {
+      const res = await fetch(`${API_BASE}/admin/admins`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const data = await res.json();
@@ -65,6 +67,7 @@ const AdminDashboard = () => {
   // initial fetch
   useEffect(() => {
     fetchEnquiries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   // fetch when active section changes (viewAdmins)
@@ -77,13 +80,14 @@ const AdminDashboard = () => {
     setSearchQuery("");
     setCurrentStudentPage(1);
     setCurrentContactPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSection]);
 
   /* -------------------- CRUD Operations -------------------- */
   const handleCreateEnquiry = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/enquiry", {
+      const res = await fetch(`${API_BASE}/enquiry`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEnquiry),
@@ -104,13 +108,14 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error("Error creating enquiry:", error);
+      alert("⚠️ Error creating enquiry. Check console.");
     }
   };
 
   const handleDeleteEnquiry = async (id) => {
     if (!window.confirm("Are you sure to delete this enquiry?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/enquiry/${id}`, {
+      const res = await fetch(`${API_BASE}/enquiry/${id}`, {
         method: "DELETE",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -122,23 +127,21 @@ const AdminDashboard = () => {
       setEnquiries((prev) => prev.filter((e) => e._id !== id));
     } catch (err) {
       console.error(err);
+      alert("⚠️ Error deleting enquiry. Check console.");
     }
   };
 
   const handleUpdateEnquiry = async () => {
     if (!editingEnquiry) return;
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/enquiry/${editingEnquiry._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(editingEnquiry),
-        }
-      );
+      const res = await fetch(`${API_BASE}/enquiry/${editingEnquiry._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(editingEnquiry),
+      });
       if (res.ok) {
         alert("✅ Enquiry updated successfully!");
         setShowEnquiryModal(false);
@@ -150,13 +153,14 @@ const AdminDashboard = () => {
       }
     } catch (err) {
       console.error(err);
+      alert("⚠️ Error updating enquiry. Check console.");
     }
   };
 
   const handleAdminCreate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/admin/users", {
+      const res = await fetch(`${API_BASE}/admin/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -175,23 +179,21 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("⚠️ Error creating admin. Check console.");
     }
   };
 
   const handleUpdateAdmin = async () => {
     if (!editingAdmin) return;
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/admin/admin/${editingAdmin._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(editingAdmin),
-        }
-      );
+      const res = await fetch(`${API_BASE}/admin/admin/${editingAdmin._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(editingAdmin),
+      });
       if (res.ok) {
         alert("✅ Admin updated successfully");
         setShowAdminModal(false);
@@ -203,13 +205,14 @@ const AdminDashboard = () => {
       }
     } catch (err) {
       console.error(err);
+      alert("⚠️ Error updating admin. Check console.");
     }
   };
 
   const handleDeleteAdmin = async (id) => {
     if (!window.confirm("Are you sure to delete this admin?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/admin/${id}`, {
+      const res = await fetch(`${API_BASE}/admin/admin/${id}`, {
         method: "DELETE",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -221,6 +224,7 @@ const AdminDashboard = () => {
       setAdmins((prev) => prev.filter((a) => a._id !== id));
     } catch (err) {
       console.error(err);
+      alert("⚠️ Error deleting admin. Check console.");
     }
   };
 
